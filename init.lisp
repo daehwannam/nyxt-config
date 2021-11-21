@@ -11,7 +11,7 @@
                      (define-key map
                        "C-q" 'quit
                        "C-8" 'make-window
-                       "C-9" 'delete-current-window)
+                       "C-0" 'delete-current-window)
                      map))))
 
 (when nil
