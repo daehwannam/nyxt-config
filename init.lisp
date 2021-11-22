@@ -1,8 +1,8 @@
 
-;; (progn
-;;   ;; allow multiple instances of Nyxt
-;;   ;; https://discourse.atlas.engineer/t/my-lightweight-configuration/47
-;;   (setf *socket-path* nil))
+(progn
+  ;; allow multiple instances of Nyxt
+  ;; https://discourse.atlas.engineer/t/my-lightweight-configuration/47
+  (setf *socket-path* nil))
 
 (define-configuration web-buffer
     ;; https://discourse.atlas.engineer/t/my-lightweight-configuration/47
