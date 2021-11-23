@@ -9,7 +9,7 @@
     ((default-modes (append '(auto-mode emacs-mode) %slot-default%))
      (override-map (let ((map (make-keymap "my-override-map")))
                      (define-key map
-                       "C-q" 'quit
+                       "C-4" 'quit
                        "C-8" 'make-window
                        "C-0" 'delete-current-window)
                      map))))
@@ -60,7 +60,11 @@
 
      (search-engines (append (mapcar (lambda (engine) (apply 'make-search-engine engine))
                                      *my-search-engines*)
-                             %slot-default%))))
+                             %slot-default%))
+
+     (bookmarks-path (make-instance 'bookmarks-data-path
+                                    :basename "~/personal/bookmarks/bookmarks.lisp"))
+     ))
 
 (define-configuration (prompt-buffer)
     ((default-modes (append '(emacs-mode) %slot-default%))
