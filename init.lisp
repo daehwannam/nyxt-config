@@ -62,8 +62,8 @@
                                      *my-search-engines*)
                              %slot-default%))
 
-     (bookmarks-path (make-instance 'bookmarks-data-path
-                                    :basename "~/personal/bookmarks/bookmarks.lisp"))
+     ;; (bookmarks-path (make-instance 'bookmarks-data-path
+     ;;                                :basename "~/personal/bookmarks/bookmarks.lisp"))
      ))
 
 (define-configuration (prompt-buffer)
