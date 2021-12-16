@@ -1,8 +1,13 @@
 
+;; (progn
+;;   ;; allow multiple instances of Nyxt
+;;   ;; https://discourse.atlas.engineer/t/my-lightweight-configuration/47
+;;   (setf *socket-path* nil))
+
 (progn
-  ;; allow multiple instances of Nyxt
-  ;; https://discourse.atlas.engineer/t/my-lightweight-configuration/47
-  (setf *socket-path* nil))
+  ;; to make new nyxt window from command line
+  ;; $ nyxt --remote --eval '(make-window)'
+  (define-configuration browser ((remote-execution-p :t))))
 
 (define-configuration web-buffer
     ;; https://discourse.atlas.engineer/t/my-lightweight-configuration/47
@@ -11,7 +16,8 @@
                      (define-key map
                        "C-4" 'quit
                        "C-8" 'make-window
-                       "C-0" 'delete-current-window)
+                       "C-0" 'delete-current-window
+                       )
                      map))))
 
 (when nil
@@ -56,7 +62,8 @@
                        "C-g" 'query-selection-in-search-engine
                        "M-s->" 'nyxt/web-mode:scroll-to-bottom
                        "M-s-<" 'nyxt/web-mode:scroll-to-top
-                       "C-s" 'nyxt/web-mode:search-buffer)))
+                       "C-s" 'nyxt/web-mode:search-buffer
+                       )))
 
      (search-engines (append (mapcar (lambda (engine) (apply 'make-search-engine engine))
                                      *my-search-engines*)
