@@ -99,12 +99,14 @@
 
                        "C-q" 'nothing
                        "C-q b" 'switch-buffer
+                       "C-q k" 'delete-buffer
 
                        "M-n" 'nyxt/web-mode:scroll-down
                        "M-p" 'nyxt/web-mode:scroll-up
 
                        "C-s" 'nyxt/web-mode:search-buffer
-                       "M-j" 'nyxt/visual-mode:visual-mode
+                       "M-j" 'nyxt/web-mode:follow-hint-new-buffer-focus
+                       "M-r" 'nyxt/visual-mode:visual-mode
                        )))
 
      (search-engines (append (mapcar (lambda (engine) (apply 'make-search-engine engine))
