@@ -1,0 +1,8 @@
+# comment after pattern is not allowed.
+
+# special file names (including directories)
+_tmp_*
+
+# emacs temporary files
+*~
+\#*#
