@@ -67,20 +67,23 @@
                       (define-key map "M-p" 'scroll-small-page-up)
                       map)))))
 
-(defvar *my-search-engines*
-  ;; https://github.com/atlas-engineer/nyxt/issues/1554#issuecomment-868443403
-  ;; https://discourse.atlas.engineer/t/search-engine-help/190
-  (list
-   '("quickdocs" "http://quickdocs.org/search?q=~a" "http://quickdocs.org/")
-   '("wiki" "https://en.wikipedia.org/w/index.php?search=~a" "https://en.wikipedia.org/")
-   '("define" "https://en.wiktionary.org/w/index.php?search=~a" "https://en.wiktionary.org/")
-   '("python3" "https://docs.python.org/3/search.html?q=~a" "https://docs.python.org/3")
-   '("doi" "https://dx.doi.org/~a" "https://dx.doi.org/")
+(progn
+  (defvar *my-search-engines*
+    ;; https://github.com/atlas-engineer/nyxt/issues/1554#issuecomment-868443403
+    ;; https://discourse.atlas.engineer/t/search-engine-help/190
+    (list
+     ;; '("quickdocs" "http://quickdocs.org/search?q=~a" "http://quickdocs.org/")
+     ;; '("wiki" "https://en.wikipedia.org/w/index.php?search=~a" "https://en.wikipedia.org/")
+     ;; '("define" "https://en.wiktionary.org/w/index.php?search=~a" "https://en.wiktionary.org/")
+     ;; '("python3" "https://docs.python.org/3/search.html?q=~a" "https://docs.python.org/3")
+     ;; '("doi" "https://dx.doi.org/~a" "https://dx.doi.org/")
 
-   '("gg" "https://www.google.com/search?q=~a" "https://www.google.com/")
-   '("nd" "https://en.dict.naver.com/#/search?query=~a" "https://en.dict.naver.com/#/main")
-   '("gk" "https://translate.google.co.kr/?hl=ko&sl=auto&tl=ko&text=~a&op=translate" "https://translate.google.co.kr/?hl=ko&sl=auto&tl=ko&text=&op=translate")
-   '("ge" "https://translate.google.co.kr/?hl=ko&sl=auto&tl=en&text=~a&op=translate" "https://translate.google.co.kr/?hl=ko&sl=auto&tl=en&text=&op=translate")))
+     '("gg" "https://www.google.com/search?q=~a" "https://www.google.com/")
+     '("nd" "https://en.dict.naver.com/#/search?query=~a" "https://en.dict.naver.com/#/main")
+     '("gk" "https://translate.google.co.kr/?hl=ko&sl=auto&tl=ko&text=~a&op=translate" "https://translate.google.co.kr/?hl=ko&sl=auto&tl=ko&text=&op=translate")
+     '("ge" "https://translate.google.co.kr/?hl=ko&sl=auto&tl=en&text=~a&op=translate" "https://translate.google.co.kr/?hl=ko&sl=auto&tl=en&text=&op=translate")))
+
+  (defvar *my-default-search-engine-name* "gg"))
 
 (define-configuration buffer
     ;; https://discourse.atlas.engineer/t/how-to-make-my-key-bindings-work-on-the-prompt-buffer-too/206/4
@@ -114,8 +117,9 @@
                        "C-q b" 'switch-buffer
                        "C-q k" 'delete-buffer
                        "C-q C-k" 'delete-current-buffer
-                       "C-q t" 'reopen-buffer
-                       "C-q C-t" 'reopen-last-buffer
+                       "C-q r" 'reopen-buffer
+                       "C-q C-r" 'reopen-last-buffer
+                       "C-q C-d" 'download-open-file
 
                        ;; "M-n" 'nyxt/web-mode:scroll-down
                        ;; "M-p" 'nyxt/web-mode:scroll-up
@@ -124,14 +128,27 @@
                        "M-j" 'nyxt/web-mode:follow-hint-new-buffer-focus
                        "M-r" 'nyxt/visual-mode:visual-mode
                        "M-e" 'nyxt/input-edit-mode:input-edit-mode
+                       "C-M-t" 'nyxt/passthrough-mode:passthrough-mode
                        )))
 
-     (search-engines (append (mapcar (lambda (engine) (apply 'make-search-engine engine))
-                                     *my-search-engines*)
-                             %slot-default%))
+     ;; the last search engine becomes the default
+     (search-engines (append %slot-default%
+                             (mapcar (lambda (engine) (apply 'make-search-engine engine))
+                                     (append *my-search-engines*
+                                             (list (assoc *my-default-search-engine-name*
+                                                          *my-search-engines*
+                                                          :test #'equal))))))
 
      (bookmarks-path (make-instance 'bookmarks-data-path
                                     :basename "~/script/common/data/nyxt/bookmarks.lisp"))))
+
+(define-configuration nyxt/passthrough-mode:passthrough-mode
+    ((keymap-scheme
+      (define-scheme "application"
+        scheme:cua
+        (list
+         "C-z" 'nothing
+         )))))
 
 (comment
  (define-command-prompt delete-forwards (prompt-buffer)
@@ -152,7 +169,7 @@
 (define-configuration (prompt-buffer)
     ((default-modes (append '(emacs-mode) %slot-default%))
      (hide-suggestion-count-p t)
-     (override-map (let ((map (make-keymap "my-buffer-override-map")))
+     (override-map (let ((map (make-keymap "my-prompt-buffer-override-map")))
                      (define-key map
                        "M-N" 'nyxt/prompt-buffer-mode:scroll-other-buffer-down
                        "M-P" 'nyxt/prompt-buffer-mode:scroll-other-buffer-up
