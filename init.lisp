@@ -120,7 +120,7 @@
 
 (define-configuration nyxt/passthrough-mode:passthrough-mode
     ((keymap-scheme
-      (define-scheFme "application"
+      (define-scheme "application"
         scheme:cua
         (list
          "C-z" 'nothing
