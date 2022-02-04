@@ -13,14 +13,14 @@
        (session-restore-prompt :never-restore))))
 
 (comment
- ;; config examples
- ;; - https://discourse.atlas.engineer/t/my-lightweight-configuration/47
- )
+  ;; config examples
+  ;; - https://discourse.atlas.engineer/t/my-lightweight-configuration/47
+  )
 
 (comment
- ;; to make new nyxt window from command line
- ;; $ nyxt --remote --eval '(make-window)'
- (define-configuration browser ((remote-execution-p :t))))
+  ;; to make new nyxt window from command line
+  ;; $ nyxt --remote --eval '(make-window)'
+  (define-configuration browser ((remote-execution-p :t))))
 
 (progn
   (defvar *my-search-engines*
@@ -65,7 +65,7 @@
                        "C-M-t" 'nyxt/passthrough-mode:passthrough-mode
                        )))
 
-      ;; the last search engine becomes the default
+     ;; the last search engine becomes the default
      (search-engines (append %slot-default%
                              (mapcar (lambda (engine) (apply 'make-search-engine engine))
                                      (append *my-search-engines*
@@ -79,7 +79,7 @@
 (define-configuration nyxt/web-mode:web-mode
     ;; https://discourse.atlas.engineer/t/how-to-make-my-key-bindings-work-on-the-prompt-buffer-too/206/4
     ((default-modes (append '(emacs-mode) %slot-default%))
-      ;; (nyxt/web-mode:hints-alphabet "ASDFGHJKL")
+     ;; (nyxt/web-mode:hints-alphabet "ASDFGHJKL")
      (keymap-scheme
       (define-scheme
           (:name-prefix "my-base" :import %slot-default%)
