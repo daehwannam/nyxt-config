@@ -136,3 +136,18 @@
                        "M-n" 'nyxt/prompt-buffer-mode:scroll-other-buffer-down
                        "M-p" 'nyxt/prompt-buffer-mode:scroll-other-buffer-up
                        )))))
+
+
+(progn
+  ;; minimum-search-length property is updated for search-buffer
+  ;;
+  ;; search-buffer is originally defined in "~/common-lisp/nyxt/source/mode/search-buffer.lisp"
+  (define-command nyxt/web-mode:search-buffer (&key case-sensitive-p)
+    "Search on the current buffer."
+    (prompt
+     :prompt "Search text"
+     :sources (list
+               (make-instance 'nyxt/web-mode:user-search-buffer-source
+                              :case-sensitive-p case-sensitive-p
+                              :minimum-search-length 1 ; updated
+                              )))))
