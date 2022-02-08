@@ -43,6 +43,7 @@
 
 (define-configuration buffer
     ;; https://discourse.atlas.engineer/t/how-to-make-my-key-bindings-work-on-the-prompt-buffer-too/206/4
+    ;; `no-script-mode' disables JavaScript (https://nyxt.atlas.engineer/documentation)
     ((default-modes (append '(emacs-mode) %slot-default%))
 
      (override-map (let ((map (make-keymap "my-buffer-override-map")))
@@ -59,7 +60,7 @@
                        "C-q C-r" 'reopen-last-buffer
 
                        "C-q C-d" 'download-open-file
-                       "C-q d" 'list-downloads       ; M-D
+                       "C-q d" 'list-downloads ; M-D
                        ;; "M-s-D" 'list-downloads       ; M-D
 
                        "C-M-t" 'nyxt/passthrough-mode:passthrough-mode
