@@ -3,6 +3,29 @@
   nil)
 
 (progn
+  (defvar option-path "~/.config/nyxt/options.lisp")
+  (unless (probe-file option-path)
+    (with-open-file (f option-path :direction :output)
+      (print '(default) f)))
+  (defvar machine-options (with-open-file (f option-path) (read f)))
+  (defvar machine-config-list
+    '((common-data-dir-path
+       (my-desktop "~/data/Dropbox/files/nyxt")
+       (my-laptop "~/data/Dropbox/files/nyxt"))))
+
+  (defun machine-config-get-first (key)
+    (car (machine-config-get-all key)))
+  (defun machine-config-get-all (key)
+    (mapcar (lambda (x) (car (cdr x)))
+	        (remove-if-not (lambda (x) (member (car x) machine-options))
+			               (cdr (assoc key machine-config-list)))))
+
+  (defun get-common-data-path (filename)
+    (concatenate 'string
+                 (machine-config-get-first 'common-data-dir-path)
+                 "/" filename)))
+
+(progn
   ;; (remote-execution-p :t) enables to make new nyxt window from command line
   ;; $ nyxt --remote --eval '(make-window)'
   ;;
@@ -75,7 +98,7 @@
                                                           :test #'equal))))))
 
      (bookmarks-path (make-instance 'bookmarks-data-path
-                                    :basename "~/script/common/data/nyxt/bookmarks.lisp"))))
+                                    :basename (get-common-data-path "bookmarks.lisp")))))
 
 (define-configuration nyxt/web-mode:web-mode
     ;; https://discourse.atlas.engineer/t/how-to-make-my-key-bindings-work-on-the-prompt-buffer-too/206/4
