@@ -6,3 +6,5 @@ _tmp_*
 # emacs temporary files
 *~
 \#*#
+
+/options.lisp
