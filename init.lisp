@@ -60,7 +60,8 @@
      '("nd" "https://en.dict.naver.com/#/search?query=~a" "https://en.dict.naver.com/#/main")
      '("gk" "https://translate.google.co.kr/?hl=ko&sl=auto&tl=ko&text=~a&op=translate" "https://translate.google.co.kr/?hl=ko&sl=auto&tl=ko&text=&op=translate")
      '("ge" "https://translate.google.co.kr/?hl=ko&sl=auto&tl=en&text=~a&op=translate" "https://translate.google.co.kr/?hl=ko&sl=auto&tl=en&text=&op=translate")
-     `("er" "https://www.reddit.com/r/emacs/search/?q=~a&restrict_sr=1&sr_nsfw=" "https://www.reddit.com/r/emacs/")))
+     '("er" "https://www.reddit.com/r/emacs/search/?q=~a&restrict_sr=1&sr_nsfw=" "https://www.reddit.com/r/emacs/")
+     '("dblp" "https://dblp.org/search?q=~a")))
 
   (defvar *my-default-search-engine-name* "gg"))
 
@@ -97,8 +98,11 @@
                                                           *my-search-engines*
                                                           :test #'equal))))))
 
-     (bookmarks-path (make-instance 'bookmarks-data-path
-                                    :basename (get-common-data-path "bookmarks.lisp")))))
+     ;; (bookmarks-path (make-instance 'bookmarks-data-path
+     ;;                                :basename (get-common-data-path "bookmarks.lisp")))
+     (bookmarks-file (make-instance 'bookmarks-file
+                                    :base-path (get-common-data-path "bookmarks.lisp")))
+     ))
 
 (define-configuration nyxt/web-mode:web-mode
     ;; https://discourse.atlas.engineer/t/how-to-make-my-key-bindings-work-on-the-prompt-buffer-too/206/4
