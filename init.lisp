@@ -13,12 +13,12 @@
        (my-desktop "~/data/Dropbox/files/nyxt")
        (my-laptop "~/data/Dropbox/files/nyxt"))))
 
-  (defun machine-config-get-first (key)
-    (car (machine-config-get-all key)))
   (defun machine-config-get-all (key)
     (mapcar (lambda (x) (car (cdr x)))
 	        (remove-if-not (lambda (x) (member (car x) machine-options))
 			               (cdr (assoc key machine-config-list)))))
+  (defun machine-config-get-first (key)
+    (car (machine-config-get-all key)))
 
   (defun get-common-data-path (filename)
     (concatenate 'string
@@ -47,21 +47,7 @@
 
 (progn
   (defvar *my-search-engines*
-    ;; https://github.com/atlas-engineer/nyxt/issues/1554#issuecomment-868443403
-    ;; https://discourse.atlas.engineer/t/search-engine-help/190
-    (list
-     ;; '("quickdocs" "http://quickdocs.org/search?q=~a" "http://quickdocs.org/")
-     ;; '("wiki" "https://en.wikipedia.org/w/index.php?search=~a" "https://en.wikipedia.org/")
-     ;; '("define" "https://en.wiktionary.org/w/index.php?search=~a" "https://en.wiktionary.org/")
-     ;; '("python3" "https://docs.python.org/3/search.html?q=~a" "https://docs.python.org/3")
-     ;; '("doi" "https://dx.doi.org/~a" "https://dx.doi.org/")
-
-     '("gg" "https://www.google.com/search?q=~a" "https://www.google.com/")
-     '("nd" "https://en.dict.naver.com/#/search?query=~a" "https://en.dict.naver.com/#/main")
-     '("gk" "https://translate.google.co.kr/?hl=ko&sl=auto&tl=ko&text=~a&op=translate" "https://translate.google.co.kr/?hl=ko&sl=auto&tl=ko&text=&op=translate")
-     '("ge" "https://translate.google.co.kr/?hl=ko&sl=auto&tl=en&text=~a&op=translate" "https://translate.google.co.kr/?hl=ko&sl=auto&tl=en&text=&op=translate")
-     '("er" "https://www.reddit.com/r/emacs/search/?q=~a&restrict_sr=1&sr_nsfw=" "https://www.reddit.com/r/emacs/")
-     '("dblp" "https://dblp.org/search?q=~a")))
+    (with-open-file (f "/home/dhnam/.config/nyxt/search-engines.lisp") (read f)))
 
   (defvar *my-default-search-engine-name* "gg"))
 
