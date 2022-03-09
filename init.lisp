@@ -74,6 +74,7 @@
                        ;; "M-s-D" 'list-downloads       ; M-D
 
                        "C-M-t" 'nyxt/passthrough-mode:passthrough-mode
+                       "C-q C-m" 'nyxt/message-mode:list-messages
                        )))
 
      ;; the last search engine becomes the default
