@@ -26,10 +26,14 @@
                  "/" filename)))
 
 (progn
-  ;; (remote-execution-p :t) enables to make new nyxt window from command line
+  ;; (remote-execution-p :t)
+  ;; => enables to make new nyxt window from command line
+  ;; e.g.
   ;; $ nyxt --remote --eval '(make-window)'
   ;;
-  ;; (session-restore-prompt :always-restore) automatically restores buffers when nyxt is started
+  ;; (session-restore-prompt :always-restore)
+  ;; => automatically restores buffers when nyxt is started
+
   (define-configuration browser
       ((remote-execution-p :t)
        ;; (session-restore-prompt :always-restore)
