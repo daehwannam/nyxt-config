@@ -79,6 +79,8 @@
 
                        "C-M-t" 'nyxt/passthrough-mode:passthrough-mode
                        "C-q C-m" 'nyxt/message-mode:list-messages
+
+                       "C-q C-t" 'toggle-status-buffer
                        )))
 
      ;; the last search engine becomes the default
@@ -156,6 +158,14 @@
                        "M-p" 'nyxt/prompt-buffer-mode:scroll-other-buffer-up
                        )))))
 
+(progn
+  ;; disable status-buffer by default
+  (define-configuration (status-buffer)
+      ((height 0)))
+
+  (defun nyxt::enable-status-buffer (&optional (window (current-window)))
+    (let ((height 24))  ; 24 is the default height of status-buffer
+      (ffi-window-set-status-buffer-height window height))))
 
 (progn
   ;; minimum-search-length property is updated for search-buffer
