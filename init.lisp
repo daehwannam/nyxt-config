@@ -77,10 +77,10 @@
                        "C-q d" 'list-downloads ; M-D
                        ;; "M-s-D" 'list-downloads       ; M-D
 
-                       "C-M-t" 'nyxt/passthrough-mode:passthrough-mode
+                       "C-M-t" 'nyxt/application-mode:application-mode
                        "C-q C-m" 'nyxt/message-mode:list-messages
 
-                       "C-q C-t" 'toggle-status-buffer
+                       "C-q C-t" 'toggle-toolbars
                        )))
 
      ;; the last search engine becomes the default
@@ -91,10 +91,11 @@
                                                           *my-search-engines*
                                                           :test #'equal))))))
 
-     ;; (bookmarks-path (make-instance 'bookmarks-data-path
-     ;;                                :basename (get-common-data-path "bookmarks.lisp")))
-     (bookmarks-file (make-instance 'bookmarks-file
-                                    :base-path (get-common-data-path "bookmarks.lisp")))
+     (bookmarks-path (make-instance 'bookmarks-data-path
+                                    :basename (get-common-data-path "bookmarks.lisp")))
+     
+     ;; (bookmarks-file (make-instance 'bookmarks-file
+     ;;                                :base-path (get-common-data-path "bookmarks.lisp")))
      ))
 
 (define-configuration nyxt/web-mode:web-mode
@@ -139,7 +140,7 @@
          "M-e" 'nyxt/input-edit-mode:input-edit-mode
          )))))
 
-(define-configuration nyxt/passthrough-mode:passthrough-mode
+(define-configuration nyxt/application-mode:application-mode
     ((keymap-scheme
       (define-scheme "application"
         scheme:cua
@@ -154,18 +155,11 @@
                      (define-key map
                        ;; "C-M-n" 'nyxt/prompt-buffer-mode:scroll-other-buffer-down
                        ;; "C-M-p" 'nyxt/prompt-buffer-mode:scroll-other-buffer-up
-                       "M-n" 'nyxt/prompt-buffer-mode:scroll-other-buffer-down
-                       "M-p" 'nyxt/prompt-buffer-mode:scroll-other-buffer-up
+                       ;; "M-n" 'nyxt/prompt-buffer-mode:scroll-other-buffer-down
+                       ;; "M-p" 'nyxt/prompt-buffer-mode:scroll-other-buffer-up
+                       "M-n" 'nyxt/web-mode:scroll-down
+                       "M-p" 'nyxt/web-mode:scroll-up
                        )))))
-
-(progn
-  ;; disable status-buffer by default
-  (define-configuration (status-buffer)
-      ((height 0)))
-
-  (defun nyxt::enable-status-buffer (&optional (window (current-window)))
-    (let ((height 24))  ; 24 is the default height of status-buffer
-      (ffi-window-set-status-buffer-height window height))))
 
 (progn
   ;; minimum-search-length property is updated for search-buffer
@@ -180,3 +174,34 @@
                               :case-sensitive-p case-sensitive-p
                               :minimum-search-length 1 ; updated
                               )))))
+
+(progn
+  ;; disable status-buffer by default
+  (defvar default-status-buffer-height 20)
+  (define-configuration (status-buffer)
+      ((height 0)))
+
+  (defvar default-message-buffer-height 16)
+  (define-configuration (window)
+      ((message-buffer-height 0)))
+
+  (comment
+    (defun nyxt::enable-status-buffer (&optional (window (current-window)))
+      ;; for commit ee67148f210c2de2b16113a09aaf0c6965570614
+      (let ((height 24))   ; 24 is the default height of status-buffer
+        (ffi-window-set-status-buffer-height window height))))
+
+  (define-command nyxt::toggle-toolbars (&optional (window (current-window)))
+    "Toggle the visibility of the message and status buffer areas."
+    (if (= 0
+           (ffi-window-get-status-buffer-height window)
+           ;; (ffi-window-get-message-buffer-height window)
+           )
+        (nyxt::unpresent-current-window window)
+        (nyxt::present-current-window window)))
+
+  (defun nyxt::unpresent-current-window (&optional (window (current-window)))
+    "Unhide everything but the current buffer."
+    (let ((default-status-buffer-height default-status-buffer-height))
+      (ffi-window-set-status-buffer-height window default-status-buffer-height)
+      (ffi-window-set-message-buffer-height window default-message-buffer-height))))
