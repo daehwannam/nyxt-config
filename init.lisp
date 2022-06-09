@@ -69,6 +69,7 @@
                        "C-q" 'nothing
                        "C-q b" 'switch-buffer
                        "C-q k" 'delete-buffer
+                       "C-q K" 'delete-other-buffers
                        "C-q C-k" 'delete-current-buffer
                        "C-q r" 'reopen-buffer
                        "C-q C-r" 'reopen-last-buffer
